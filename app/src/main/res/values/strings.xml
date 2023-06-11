@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Distributed Systems</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="choose_gpx_file">Choose GPX file</string>
+    <string name="greet_user"><b>Hello User</b></string>
+
+    <string name="retard_proof_text">
+        <b>WARNING:</b> This will open your default file manager then you will be asked to browse your internal storage and choose a GPX file to send for processing.
+    </string>
+    <string name="back">Back</string>
+    <string name="data">Data:</string>
+    <string name="statistics_analysis">Statistics Analysis</string>
+    <string name="total_distance">Distance</string>
+    <string name="total_elevation">Elevation</string>
+    <string name="total_time">Time</string>
+    <string name="exercise_summary">Exercise Summary</string>
+</resources>

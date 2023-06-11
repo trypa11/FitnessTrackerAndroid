@@ -1,0 +1,8 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#232023" /> <!-- Set the desired background color with transparency -->
+    <corners android:radius="8dp" /> <!-- Set the corner radius to round the edges -->
+
+    <item>
+        <bitmap android:src="@android:color/transparent" android:alpha="0.8" /> <!-- Set the desired blur effect using an alpha value -->
+    </item>
+</shape>
