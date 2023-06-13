@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println("Selected file path: " + selectedFilePath);
                             showFilePickedToast();
                             //call client thread
-                            Client client = new Client(selectedFilePath);
+                            Client client = new Client(MainActivity.this, selectedFilePath);
                             client.start();
                         }
                     }
