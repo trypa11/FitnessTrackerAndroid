@@ -17,4 +17,5 @@
     <string name="total_elevation">Elevation</string>
     <string name="total_time">Time</string>
     <string name="exercise_summary">Exercise Summary</string>
+    <string name="User">User</string>
 </resources>
