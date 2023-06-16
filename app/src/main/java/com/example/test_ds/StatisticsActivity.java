@@ -25,6 +25,8 @@ public class StatisticsActivity extends AppCompatActivity {
     private static String curruser;
     private static String user_ms_time;
     private static ArrayList<String> users = new ArrayList<String>();
+    private static ArrayList<String> user_seg = new ArrayList<String>();
+    private static ArrayList<String> user_seg_time = new ArrayList<String>();
 
     private static ArrayList<Float> userDistances = new ArrayList<Float>();
     private static ArrayList<Float> userElevations = new ArrayList<Float>();
@@ -32,6 +34,7 @@ public class StatisticsActivity extends AppCompatActivity {
     private static double averageDistance;
     private static double averageElevation;
     private static double averageTime;
+    private static int seg_num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +153,9 @@ public class StatisticsActivity extends AppCompatActivity {
                 "User:",
                 "Total Distance:",
                 "Total Elevation:",
-                "Total Time:"
+                "Total Time:",
+                "Segment:",
+                "Time:"
         };
 
         // Remove the words from the input string
@@ -167,7 +172,16 @@ public class StatisticsActivity extends AppCompatActivity {
         averageElevation = Double.parseDouble(parts[2]);
         averageTime = Double.parseDouble(parts[3]);
         int i = 4;
-        while (i < parts.length) {
+        boolean flag = true;
+        int seg_num = 1;
+        //create segment number to string
+        String seg_num_string = Integer.toString(seg_num);
+        while (i < parts.length && flag) {
+            //if find this string "Segment" then break
+            if (parts[i].equals(seg_num_string)) {
+                flag = false;
+                break;
+            }
             String user = parts[i];
             float totalDistance = Float.parseFloat(parts[i + 1]);
             float totalElevation = Float.parseFloat(parts[i + 2]);
@@ -181,6 +195,16 @@ public class StatisticsActivity extends AppCompatActivity {
             userElevations.add(totalElevation);
             userTimes.add((float)totalTime);
         }
+        while (i < parts.length && parts[i].equals(seg_num_string))
+        {
+            String u_seg = parts[i+1];
+            Long seg_time = Long.parseLong(parts[i+2]);
+            user_seg_time.add(msToTime(seg_time));
+            user_seg.add(u_seg);
+            seg_num++;
+            seg_num_string = Integer.toString(seg_num);
+            i += 3;
+        }
         //print the variables
         System.out.println("Current User: " + curruser);
         System.out.println("Average distance: " + averageDistance);
@@ -191,6 +215,10 @@ public class StatisticsActivity extends AppCompatActivity {
             System.out.println("Total distance: " + userDistances.get(j));
             System.out.println("Total elevation: " + userElevations.get(j));
             System.out.println("Total time: " + userTimes.get(j));
+        }
+        for (int j = 0; j < user_seg.size(); j++) {
+            System.out.println("User: " + user_seg.get(j));
+            System.out.println("Total time: " + user_seg_time.get(j));
         }
 
 
