@@ -232,21 +232,20 @@ public class StatisticsActivity extends AppCompatActivity {
         i=seg_num+1;
         seg_num=2;
         seg_num_string = Integer.toString(seg_num);
-        while (i < parts.length && i+2<parts.length)
+        while (i < parts.length )
         {
+            if (parts[i].equals(seg_num_string)) {
+                seg_num++;
+                seg_num_string = Integer.toString(seg_num);
+                i ++;
+            } else {
             String u_seg = parts[i];
             Long seg_time = Long.parseLong(parts[i+1]);
             user_s_t.add(msToTime(seg_time));
             user_s.add(u_seg);
             seg_num_list.add(seg_num-1);
-            if (parts[i + 2].equals(seg_num_string)) {
-                seg_num++;
-                seg_num_string = Integer.toString(seg_num);
-                i += 3;
-            } else {
-                i += 2;
+            i += 2;
             }
-
         }
         //print the variables
         System.out.println("Current User: " + curruser);
