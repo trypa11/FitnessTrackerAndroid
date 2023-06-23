@@ -18,4 +18,5 @@
     <string name="total_time">Time</string>
     <string name="exercise_summary">Exercise Summary</string>
     <string name="User">User</string>
+    <string name="Segment_Number">Segment Number</string>
 </resources>

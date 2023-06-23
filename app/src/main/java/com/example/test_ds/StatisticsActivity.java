@@ -1,18 +1,20 @@
 package com.example.test_ds;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.regex.*;
-import com.github.mikephil.*;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -25,8 +27,9 @@ public class StatisticsActivity extends AppCompatActivity {
     private static String curruser;
     private static String user_ms_time;
     private static ArrayList<String> users = new ArrayList<String>();
-    private static ArrayList<String> user_seg = new ArrayList<String>();
-    private static ArrayList<String> user_seg_time = new ArrayList<String>();
+    private static ArrayList<Integer> seg_num_list = new ArrayList<Integer>();
+
+
 
     private static ArrayList<Float> userDistances = new ArrayList<Float>();
     private static ArrayList<Float> userElevations = new ArrayList<Float>();
@@ -34,7 +37,9 @@ public class StatisticsActivity extends AppCompatActivity {
     private static double averageDistance;
     private static double averageElevation;
     private static double averageTime;
-    private static int seg_num;
+    private static ArrayList<String> user_s = new ArrayList<>();
+    private static ArrayList<String> user_s_t = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,24 +65,44 @@ public class StatisticsActivity extends AppCompatActivity {
 
             }
         }
+        String user_s_t_string = "";
+        for (int i = 0; i < user_s_t.size(); i++) {
+            user_s_t_string += user_s_t.get(i) + "\n";
+        }
 
+        TextView seg_t= findViewById(R.id.segmentTimeView);
+        seg_t.setText(user_s_t_string);
+
+        String user_s_string = "";
+        for (int i = 0; i < user_s.size(); i++) {
+            user_s_string += user_s.get(i) + "\n";
+        }
+        TextView seg= findViewById(R.id.segmentUserTextView);
+        seg.setText(user_s_string);
+        String seg_num_string = "";
+        for (int i = 0; i < seg_num_list.size(); i++) {
+            seg_num_string += seg_num_list.get(i) + "\n";
+        }
+        TextView seg_num= findViewById(R.id.segmentNumTextView);
+        seg_num.setText(seg_num_string);
         ArrayList<BarEntry> entries = new ArrayList<>();
         for (int j = 0; j < users.size(); j++) {
             if (users.get(j).equals(curruser)) {
-                entries.add(new BarEntry(0f + j, (float) percentage(userDistances.get(j),(float) averageDistance)));
-                entries.add(new BarEntry(1f + j, (float) percentage(userElevations.get(j),(float) averageElevation)));
-                entries.add(new BarEntry(2f + j, (float) percentage(userTimes.get(j),(float) averageTime)));
+                entries.add(new BarEntry(0f , (float) percentage(userDistances.get(j),(float) averageDistance)));
+                entries.add(new BarEntry(1f , (float) percentage(userElevations.get(j),(float) averageElevation)));
+                entries.add(new BarEntry(2f , (float) percentage(userTimes.get(j),(float) averageTime)));
             }
         }
         ArrayList<String> labels = new ArrayList<>();
-        labels.add(curruser +""+"Distance");
-        labels.add(curruser+"" +"Elevation");
-        labels.add(curruser+"" +"Time");
+        labels.add("Distance");
+        labels.add("Elevation");
+        labels.add("Time");
+
 
 
 
         // Create a data set with the entries and labels
-        BarDataSet dataSet = new BarDataSet(entries, "User Values");
+        BarDataSet dataSet = new BarDataSet(entries, "Precentage of Average Values of Users");
         dataSet.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -87,6 +112,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         // Customize the appearance of the bar chart
         BarData barData = new BarData(dataSet);
+        barChart.setExtraBottomOffset(8f); // Adjust as needed
         barChart.setData(barData);
         barChart.getDescription().setEnabled(false);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
@@ -97,6 +123,10 @@ public class StatisticsActivity extends AppCompatActivity {
         barChart.getAxisRight().setEnabled(false);
         barChart.animateY(1000);
         barChart.invalidate();
+
+
+
+
 
 
         Button backButton = findViewById(R.id.backButton);
@@ -146,6 +176,9 @@ public class StatisticsActivity extends AppCompatActivity {
         userDistances.clear();
         userElevations.clear();
         userTimes.clear();
+        user_s.clear();
+        user_s_t.clear();
+        seg_num_list.clear();
         String[] wordsToRemove = {
                 "Average Distance:",
                 "Average Total Elevation:",
@@ -180,6 +213,7 @@ public class StatisticsActivity extends AppCompatActivity {
             //if find this string "Segment" then break
             if (parts[i].equals(seg_num_string)) {
                 flag = false;
+                seg_num=i;
                 break;
             }
             String user = parts[i];
@@ -195,15 +229,24 @@ public class StatisticsActivity extends AppCompatActivity {
             userElevations.add(totalElevation);
             userTimes.add((float)totalTime);
         }
-        while (i < parts.length && parts[i].equals(seg_num_string))
+        i=seg_num+1;
+        seg_num=2;
+        seg_num_string = Integer.toString(seg_num);
+        while (i < parts.length && i+2<parts.length)
         {
-            String u_seg = parts[i+1];
-            Long seg_time = Long.parseLong(parts[i+2]);
-            user_seg_time.add(msToTime(seg_time));
-            user_seg.add(u_seg);
-            seg_num++;
-            seg_num_string = Integer.toString(seg_num);
-            i += 3;
+            String u_seg = parts[i];
+            Long seg_time = Long.parseLong(parts[i+1]);
+            user_s_t.add(msToTime(seg_time));
+            user_s.add(u_seg);
+            seg_num_list.add(seg_num-1);
+            if (parts[i + 2].equals(seg_num_string)) {
+                seg_num++;
+                seg_num_string = Integer.toString(seg_num);
+                i += 3;
+            } else {
+                i += 2;
+            }
+
         }
         //print the variables
         System.out.println("Current User: " + curruser);
@@ -216,10 +259,13 @@ public class StatisticsActivity extends AppCompatActivity {
             System.out.println("Total elevation: " + userElevations.get(j));
             System.out.println("Total time: " + userTimes.get(j));
         }
-        for (int j = 0; j < user_seg.size(); j++) {
-            System.out.println("User: " + user_seg.get(j));
-            System.out.println("Total time: " + user_seg_time.get(j));
+        //print segment number ,user and time
+        for (int j = 0; j < user_s.size(); j++) {
+            System.out.println("Segment: " + seg_num_list.get(j));
+            System.out.println("User: " + user_s.get(j));
+            System.out.println("Time: " + user_s_t.get(j));
         }
+
 
 
     }
@@ -235,10 +281,10 @@ public class StatisticsActivity extends AppCompatActivity {
         return time;
     }
 
-public static double percentage(float value1, float value2) {
+    public static double percentage(float value1, float value2) {
         double percentage = (value2 / value1) * 100;
-        System.out.println(percentage);
         return percentage;
     }
+
 
 }
