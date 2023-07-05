@@ -35,7 +35,7 @@ public class Client extends Thread {
         ObjectInputStream in = null;
         Socket requestSocket = null;
         try {
-            requestSocket = new Socket("192.168.1.9", 1234);
+            requestSocket = new Socket("192.168.1.8", 1234);
 
             /* Create the streams to send and receive data from server */
             out = new ObjectOutputStream(requestSocket.getOutputStream());
